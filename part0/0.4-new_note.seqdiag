@@ -1,0 +1,19 @@
+user->browser: enters "this is a \nnote" and clicks send
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+note right of browser: ContentType: application/x-www-form-urlencoded \nnote: this is a new note
+server->server: notes.push()
+note over server: Push { conent: 'this is a note', date: today() }
+server-->browser: Redirect /notes
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+server-->browser: main.js
+
+note over browser: browser starts executing js-code \n that requests JSON data from server
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+server-->browser: [ ..., { content: "'this is a note", date: "2019-11-13" }]
+browser->browser: updateDom()
+browser->user: render()

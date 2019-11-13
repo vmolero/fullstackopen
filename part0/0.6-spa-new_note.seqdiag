@@ -1,0 +1,7 @@
+user->browser: enters "this is a \nnote" and clicks send
+browser->browser: updateDom()
+browser->user: render()
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+note right of browser: payload {"content":"this is a note","date":"2019-11-12T23:50:11.667Z"}
+server-->browser: 201 Created
+note left of server: payload {"message":"note created"}
