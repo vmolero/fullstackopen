@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
+const Statistic = ({ label, text }) => {
+  return (
+    <li>
+      {label}: {text}
+    </li>
+  );
+};
+
 const Statistics = ({ good, neutral, bad }) => {
   const all = good + neutral + bad;
   const header = <h2>Statistics</h2>;
@@ -31,12 +39,12 @@ const Statistics = ({ good, neutral, bad }) => {
     <>
       {header}
       <ul>
-        <li>Good: {good}</li>
-        <li>Neutral: {neutral}</li>
-        <li>Bad: {bad}</li>
-        <li>All: {all}</li>
-        <li>Average: {average(good, neutral, bad)}</li>
-        <li>Positive: {positive(good, neutral, bad)} %</li>
+        <Statistic label="Good" text={good} />
+        <Statistic label="Neutral" text={neutral} />
+        <Statistic label="Bad" text={bad} />
+        <Statistic label="All" text={all} />
+        <Statistic label="Average" text={average(good, neutral, bad)} />
+        <Statistic label="Positive" text={positive(good, neutral, bad) + "%"} />
       </ul>
     </>
   );
