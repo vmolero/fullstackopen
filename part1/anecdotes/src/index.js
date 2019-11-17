@@ -26,6 +26,38 @@ const Button = ({ onClick, text }) => {
   return <button onClick={onClick}>{text}</button>;
 };
 
+const DayAnecdote = ({ anecdote, votes, voteHandler, nextHandler }) => {
+  return (
+    <>
+      <h1>Anecdote of the day</h1>
+      <div>{anecdote}</div>
+      <div>has {votes} votes</div>
+      <Button onClick={voteHandler} text="vote" />
+      <Button onClick={nextHandler} text="next anecdote" />
+    </>
+  );
+};
+
+function getFirstIndexForValue(collection, value) {
+  let found = false,
+    index = 0;
+  for (index = 0; index < collection.length && !found; index++) {
+    found = collection[index] === value;
+  }
+  return index - 1;
+}
+const MostVoted = ({ anecdotes, votes }) => {
+  const maxVotes = Math.max(...votes);
+  const index = getFirstIndexForValue(votes, maxVotes);
+  return (
+    <>
+      <h2>Anecdote with most votes</h2>
+      <div>{anecdotes[index]}</div>
+      <div>has {maxVotes} votes</div>
+    </>
+  );
+};
+
 const App = props => {
   const totalAnecdotes = props.anecdotes.length;
   const randomIndex = getRandomInt(totalAnecdotes - 1);
@@ -40,13 +72,13 @@ const App = props => {
 
   return (
     <>
-      <div>{props.anecdotes[selected]}</div>
-      <div>has {voted[selected]} votes</div>
-      <Button onClick={() => voteFor(voted, selected)} text="vote" />
-      <Button
-        onClick={() => setSelected(getNewIndex(selected, totalAnecdotes))}
-        text="next anecdote"
+      <DayAnecdote
+        anecdote={props.anecdotes[selected]}
+        votes={voted[selected]}
+        voteHandler={() => voteFor(voted, selected)}
+        nextHandler={() => setSelected(getNewIndex(selected, totalAnecdotes))}
       />
+      <MostVoted anecdotes={props.anecdotes} votes={voted} />
     </>
   );
 };
