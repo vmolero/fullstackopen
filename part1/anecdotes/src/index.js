@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-const App = props => {
-  const [selected, setSelected] = useState(0);
-
-  return <div>{props.anecdotes[selected]}</div>;
-};
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 
 const anecdotes = [
   "If it hurts, do it more often",
@@ -15,5 +13,25 @@ const anecdotes = [
   "Premature optimization is the root of all evil.",
   "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it."
 ];
+
+const Button = ({ onClick, text }) => {
+  return <button onClick={onClick}>{text}</button>;
+};
+
+const App = props => {
+  const totalAnecdotes = anecdotes.length;
+  const randomNumber = getRandomInt(totalAnecdotes - 1);
+  const [selected, setSelected] = useState(randomNumber);
+
+  return (
+    <>
+      <div>{props.anecdotes[selected]}</div>
+      <Button
+        onClick={() => setSelected(getRandomInt(totalAnecdotes - 1))}
+        text="next anecdote"
+      />
+    </>
+  );
+};
 
 ReactDOM.render(<App anecdotes={anecdotes} />, document.getElementById("root"));
