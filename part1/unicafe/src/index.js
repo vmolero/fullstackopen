@@ -3,6 +3,15 @@ import ReactDOM from "react-dom";
 
 const Statistics = ({ good, neutral, bad }) => {
   const all = good + neutral + bad;
+  const header = <h2>Statistics</h2>;
+  if (all === 0) {
+    return (
+      <>
+        {header}
+        <div>No feedback given</div>
+      </>
+    );
+  }
   const average = (good, neutral, bad) => {
     const all = good + neutral + bad;
     if (all === 0) {
@@ -20,7 +29,7 @@ const Statistics = ({ good, neutral, bad }) => {
 
   return (
     <>
-      <h2>Statistics</h2>
+      {header}
       <ul>
         <li>Good: {good}</li>
         <li>Neutral: {neutral}</li>
