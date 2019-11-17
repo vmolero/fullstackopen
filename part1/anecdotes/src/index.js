@@ -5,6 +5,14 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
+function getNewIndex(prevIndex, arrayLength) {
+  let newRandomIndex = prevIndex;
+  do {
+    newRandomIndex = getRandomInt(arrayLength - 1);
+  } while (newRandomIndex === prevIndex);
+  return newRandomIndex;
+}
+
 const anecdotes = [
   "If it hurts, do it more often",
   "Adding manpower to a late software project makes it later!",
@@ -19,15 +27,24 @@ const Button = ({ onClick, text }) => {
 };
 
 const App = props => {
-  const totalAnecdotes = anecdotes.length;
-  const randomNumber = getRandomInt(totalAnecdotes - 1);
-  const [selected, setSelected] = useState(randomNumber);
+  const totalAnecdotes = props.anecdotes.length;
+  const randomIndex = getRandomInt(totalAnecdotes - 1);
+  const [selected, setSelected] = useState(randomIndex);
+  const [voted, setVoted] = useState(new Array(totalAnecdotes).fill(0));
+
+  const voteFor = (voted, index) => {
+    const votedClone = [...voted];
+    votedClone[index]++;
+    setVoted(votedClone);
+  };
 
   return (
     <>
       <div>{props.anecdotes[selected]}</div>
+      <div>has {voted[selected]} votes</div>
+      <Button onClick={() => voteFor(voted, selected)} text="vote" />
       <Button
-        onClick={() => setSelected(getRandomInt(totalAnecdotes - 1))}
+        onClick={() => setSelected(getNewIndex(selected, totalAnecdotes))}
         text="next anecdote"
       />
     </>
