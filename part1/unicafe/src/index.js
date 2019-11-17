@@ -2,6 +2,22 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
 const Statistics = ({ good, neutral, bad }) => {
+  const all = good + neutral + bad;
+  const average = (good, neutral, bad) => {
+    const all = good + neutral + bad;
+    if (all === 0) {
+      return 0;
+    }
+    return (good - bad) / all;
+  };
+  const positive = (good, neutral, bad) => {
+    const all = good + neutral + bad;
+    if (all === 0) {
+      return 0;
+    }
+    return (good / all) * 100;
+  };
+
   return (
     <>
       <h2>Statistics</h2>
@@ -9,6 +25,9 @@ const Statistics = ({ good, neutral, bad }) => {
         <li>Good: {good}</li>
         <li>Neutral: {neutral}</li>
         <li>Bad: {bad}</li>
+        <li>All: {all}</li>
+        <li>Average: {average(good, neutral, bad)}</li>
+        <li>Positive: {positive(good, neutral, bad)} %</li>
       </ul>
     </>
   );
