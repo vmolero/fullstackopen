@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -41,42 +44,20 @@ const App = () => {
     setNewNumber("");
   };
 
-  const listing = persons
-    .filter(person => {
-      return person.name.toLowerCase().indexOf(newFilter.toLowerCase()) > -1;
-    })
-    .map(person => {
-      return (
-        <li key={person.id}>
-          {person.name} {person.number}
-        </li>
-      );
-    });
-
   return (
     <div>
       <h1>Phonebook</h1>
-      <h2>Search</h2>
-      <div>
-        By name:
-        <input type="text" value={newFilter} onChange={handleFilterChange} />
-      </div>
+      <Filter filter={newFilter} handleFilterChange={handleFilterChange} />
       <h2>Add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name:
-          <input type="text" value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number:
-          <input type="text" value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+        name={newName}
+        number={newNumber}
+        handleNameChange={handleNameChange}
+        handleSubmit={addPerson}
+        handleNumberChange={handleNumberChange}
+      />
       <h2>Numbers</h2>
-      <ul>{listing}</ul>
+      <Persons filter={newFilter} persons={persons} />
     </div>
   );
 };
