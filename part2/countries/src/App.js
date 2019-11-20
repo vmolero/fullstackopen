@@ -4,6 +4,7 @@ import CountryList from "./components/CountryList";
 
 function App() {
   const [country, setCountry] = useState("");
+  const [isoCode, setIsoCode] = useState(null);
   const [error, setError] = useState("");
   const [data, setData] = useState([]);
 
@@ -12,9 +13,10 @@ function App() {
   };
 
   useEffect(() => {
-    const getCountry = async () => {
+    const getCountries = async () => {
       setData([]);
       setError("");
+      setIsoCode(null);
       if (country) {
         try {
           const response = await axios.get(
@@ -26,16 +28,44 @@ function App() {
         }
       }
     };
-    getCountry();
+    getCountries();
   }, [country]);
 
-  const output = error ? <p>{error}</p> : <CountryList countries={data} />;
+  useEffect(() => {
+    const getCountry = async () => {
+      if (!isoCode) {
+        return () => null;
+      }
+      setData([]);
+      setError("");
+      setCountry("");
+      try {
+        const response = await axios.get(
+          `https://restcountries.eu/rest/v2/alpha/${isoCode}`
+        );
+        setData([response.data]);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+    getCountry();
+  }, [isoCode]);
+
+  const handleShow = isoCode => event => {
+    setIsoCode(isoCode);
+  };
+
+  const output = error ? (
+    <p>{error}</p>
+  ) : (
+    <CountryList countries={data} handleShow={handleShow} />
+  );
 
   return (
     <div>
       <div>
         Find countries:
-        <input type="text" onChange={handleCountryChange} />
+        <input type="text" value={country} onChange={handleCountryChange} />
       </div>
       <div>{output}</div>
     </div>
