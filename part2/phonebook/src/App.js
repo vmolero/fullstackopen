@@ -22,6 +22,13 @@ const App = () => {
     setNewFilter(event.target.value);
   };
 
+  const handleDeleteClick = personId => event => {
+    const person = persons.filter(person => person.id === personId).pop();
+    if (window.confirm(`Delete ${person.name}`)) {
+      personService.delete(personId);
+    }
+  };
+
   const addPerson = event => {
     event.preventDefault();
     const names = persons.map(person => person.name);
@@ -46,7 +53,7 @@ const App = () => {
     });
   };
 
-  useEffect(hook, []);
+  useEffect(hook, [persons]);
 
   return (
     <div>
@@ -61,7 +68,11 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons filter={newFilter} persons={persons} />
+      <Persons
+        filter={newFilter}
+        persons={persons}
+        handleDeleteClick={handleDeleteClick}
+      />
     </div>
   );
 };

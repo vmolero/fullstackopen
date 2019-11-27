@@ -1,6 +1,6 @@
 import React from "react";
 
-const Persons = ({ filter, persons }) => {
+const Persons = ({ filter, persons, handleDeleteClick }) => {
   const listing = persons
     .filter(person => {
       return person.name.toLowerCase().indexOf(filter.toLowerCase()) > -1;
@@ -8,7 +8,8 @@ const Persons = ({ filter, persons }) => {
     .map(person => {
       return (
         <li key={person.id}>
-          {person.name} {person.number}
+          {person.name} {person.number}{" "}
+          <button onClick={handleDeleteClick(person.id)}>Delete</button>
         </li>
       );
     });
