@@ -24,16 +24,28 @@ const App = () => {
 
   const handleDeleteClick = personId => event => {
     const person = persons.filter(person => person.id === personId).pop();
-    if (window.confirm(`Delete ${person.name}`)) {
+    if (window.confirm(`Delete ${person.name}?`)) {
       personService.delete(personId);
     }
   };
 
   const addPerson = event => {
     event.preventDefault();
-    const names = persons.map(person => person.name);
-    if (names.includes(newName)) {
-      alert(`${newName} is already added to phonebook`);
+    const personsCopy = persons.map(x => x);
+    const person = personsCopy.filter(person => person.name === newName).pop();
+    if (person) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook. Update number?`
+        )
+      ) {
+        person.number = newNumber;
+        personService.update(person.id, person).then(() => {
+          setPersons(personsCopy);
+          setNewName("");
+          setNewNumber("");
+        });
+      }
       return;
     }
     const personObject = {
