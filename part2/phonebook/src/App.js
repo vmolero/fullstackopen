@@ -36,13 +36,18 @@ const App = () => {
   const handleDeleteClick = personId => event => {
     const person = persons.filter(person => person.id === personId).pop();
     if (window.confirm(`Delete ${person.name}?`)) {
-      personService.delete(personId).then(() => {
-        const filteredPersons = persons.filter(
-          person => person.id !== personId
-        );
-        setPersons(filteredPersons);
-        showToast(`Person ${person.name} deleted`);
-      });
+      personService
+        .delete(personId)
+        .then(() => {
+          const filteredPersons = persons.filter(
+            person => person.id !== personId
+          );
+          setPersons(filteredPersons);
+          showToast(`Person ${person.name} deleted`);
+        })
+        .catch(err => {
+          showToast(`Failed to delete person`, "error");
+        });
     }
   };
 
@@ -57,10 +62,15 @@ const App = () => {
         )
       ) {
         person.number = newNumber;
-        personService.update(person.id, person).then(() => {
-          setPersons(personsCopy);
-          showToast(`Person ${person.name} updated`);
-        });
+        personService
+          .update(person.id, person)
+          .then(() => {
+            setPersons(personsCopy);
+            showToast(`Person ${person.name} updated`);
+          })
+          .catch(err => {
+            showToast(`Failed to update person`, "error");
+          });
       }
       setNewName("");
       setNewNumber("");
@@ -70,13 +80,18 @@ const App = () => {
       name: newName,
       number: newNumber
     };
-    personService.create(personObject).then(response => {
-      const createdPerson = response.data;
-      setPersons(persons.concat(createdPerson));
-      setNewName("");
-      setNewNumber("");
-      showToast(`Person ${createdPerson.name} added`);
-    });
+    personService
+      .create(personObject)
+      .then(response => {
+        const createdPerson = response.data;
+        setPersons(persons.concat(createdPerson));
+        setNewName("");
+        setNewNumber("");
+        showToast(`Person ${createdPerson.name} added`);
+      })
+      .catch(err => {
+        showToast(`Failed to add person`, "error");
+      });
   };
 
   const hook = () => {
