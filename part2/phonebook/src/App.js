@@ -25,7 +25,12 @@ const App = () => {
   const handleDeleteClick = personId => event => {
     const person = persons.filter(person => person.id === personId).pop();
     if (window.confirm(`Delete ${person.name}?`)) {
-      personService.delete(personId);
+      personService.delete(personId).then(() => {
+        const filteredPersons = persons.filter(
+          person => person.id !== personId
+        );
+        setPersons(filteredPersons);
+      });
     }
   };
 
@@ -42,10 +47,10 @@ const App = () => {
         person.number = newNumber;
         personService.update(person.id, person).then(() => {
           setPersons(personsCopy);
-          setNewName("");
-          setNewNumber("");
         });
       }
+      setNewName("");
+      setNewNumber("");
       return;
     }
     const personObject = {
@@ -65,7 +70,7 @@ const App = () => {
     });
   };
 
-  useEffect(hook, [persons]);
+  useEffect(hook, []);
 
   return (
     <div>
