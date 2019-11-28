@@ -3,12 +3,16 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personService from "./services/persons";
+import Notification from "./components/Notification";
+
+import "./index.css";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
+  const [newMessage, setNewMessage] = useState({ type: "", text: "" });
 
   const handleNameChange = event => {
     setNewName(event.target.value);
@@ -22,6 +26,13 @@ const App = () => {
     setNewFilter(event.target.value);
   };
 
+  const showToast = (text, type = "success") => {
+    setNewMessage({ type, text });
+    setTimeout(() => {
+      setNewMessage({ type: "", text: "" });
+    }, 5000);
+  };
+
   const handleDeleteClick = personId => event => {
     const person = persons.filter(person => person.id === personId).pop();
     if (window.confirm(`Delete ${person.name}?`)) {
@@ -30,6 +41,7 @@ const App = () => {
           person => person.id !== personId
         );
         setPersons(filteredPersons);
+        showToast(`Person ${person.name} deleted`);
       });
     }
   };
@@ -47,6 +59,7 @@ const App = () => {
         person.number = newNumber;
         personService.update(person.id, person).then(() => {
           setPersons(personsCopy);
+          showToast(`Person ${person.name} updated`);
         });
       }
       setNewName("");
@@ -62,6 +75,7 @@ const App = () => {
       setPersons(persons.concat(createdPerson));
       setNewName("");
       setNewNumber("");
+      showToast(`Person ${createdPerson.name} added`);
     });
   };
 
@@ -76,6 +90,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={newMessage.text} type={newMessage.type} />
       <Filter filter={newFilter} handleFilterChange={handleFilterChange} />
       <h2>Add a new</h2>
       <PersonForm
