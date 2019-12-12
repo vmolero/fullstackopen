@@ -69,7 +69,10 @@ const App = () => {
             showToast(`Person ${person.name} updated`);
           })
           .catch(err => {
-            showToast(`Failed to update person`, "error");
+            showToast(
+              `Failed to update person: ${err.response.data.error}`,
+              "error"
+            );
           });
       }
       setNewName("");
@@ -90,7 +93,7 @@ const App = () => {
         showToast(`Person ${createdPerson.name} added`);
       })
       .catch(err => {
-        showToast(`Failed to add person`, "error");
+        showToast(`Failed to add person: ${err.response.data.error}`, "error");
       });
   };
 

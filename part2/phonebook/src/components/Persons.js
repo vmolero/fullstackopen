@@ -1,6 +1,6 @@
 import React from "react";
 
-const Persons = ({ filter, persons, handleDeleteClick }) => {
+const Persons = ({ filter = "", persons, handleDeleteClick }) => {
   const listing = persons
     .filter(person => {
       return person.name.toLowerCase().indexOf(filter.toLowerCase()) > -1;
